@@ -12,17 +12,16 @@ if %errorLevel% == 0 (
 )
 
 :admin
-title Instalador Navaja Suiza
+title Instalador AUDITORIA
 color 0b
 cls
 echo ============================================================
-echo      DESCARGANDO NAVAJA SUIZA DESDE GITHUB...
+echo      DESCARGANDO AUDITORIA DESDE GITHUB...
 echo ============================================================
 echo.
 
 :: --- CONFIGURACION ---
-:: SUSTITUYE LA SIGUIENTE URL POR TU URL "RAW" DE GITHUB
-set "URL_GITHUB=https://raw.githubusercontent.com/Ale-debug-29/Limpieza-semanal/main/NavajaSuiza_Menu.ps1"
+set "URL_GITHUB=https:https://raw.githubusercontent.com/Ale-debug-29/Herramienta-de-Auditoria-WIN/refs/heads/main/Auditoria.ps1"
 set "RUTA_DESTINO=%TEMP%\NavajaSuiza_Menu.ps1"
 
 :: Descargar el archivo usando PowerShell
