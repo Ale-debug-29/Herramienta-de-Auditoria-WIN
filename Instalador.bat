@@ -1,45 +1,47 @@
 @echo off
-:: Comprobar si el script se ejecuta como administrador
+setlocal
+title Auditoria
+
+:: --- COMPROBAR PERMISOS DE ADMINISTRADOR ---
 net session >nul 2>&1
 if %errorLevel% == 0 (
-    goto :admin
+    goto :run_script
 ) else (
-    echo.
-    echo  [!] ERROR: Por favor, ejecuta este archivo como ADMINISTRADOR.
-    echo.
-    pause
-    exit /b
+    goto :elevate
 )
 
-:admin
-title Instalador AUDITORIA
-color 0b
+:elevate
+:: Crea un script temporal en VBS para pedir permisos de admin
+echo Set UAC = CreateObject^("Shell.Application"^) > "%temp%\getadmin.vbs"
+echo UAC.ShellExecute "%~s0", "", "", "runas", 1 >> "%temp%\getadmin.vbs"
+"%temp%\getadmin.vbs"
+del "%temp%\getadmin.vbs"
+exit /B
+
+:run_script
 cls
 echo ============================================================
-echo      DESCARGANDO AUDITORIA DESDE GITHUB...
+echo      INSTALADOR AUDITORIA (MODO ADMINISTRADOR)
 echo ============================================================
 echo.
 
-:: --- CONFIGURACION ---
-set "URL_GITHUB=https:https://raw.githubusercontent.com/Ale-debug-29/Herramienta-de-Auditoria-WIN/refs/heads/main/Auditoria.ps1"
-set "RUTA_DESTINO=%TEMP%\NavajaSuiza_Menu.ps1"
+:: --- CONFIGURACION DE URLS ---
+:: Asegurate de que estas URLs apunten a tu repositorio RAW
+set "URL_INSTALLER=https://raw.githubusercontent.com/Ale-debug-29/Limpieza-semanal/main/Instalar-LimpiezaSemanal.ps1"
+set "TEMP_PS1=%TEMP%\Instalar-Navaja.ps1"
 
-:: Descargar el archivo usando PowerShell
-powershell -Command "[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; Invoke-WebRequest -Uri '%URL_GITHUB%' -OutFile '%RUTA_DESTINO%' -UseBasicParsing"
+echo [*] Descargando componentes de instalacion...
+powershell -Command "[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; Invoke-WebRequest -Uri '%URL_INSTALLER%' -OutFile '%TEMP_PS1%' -UseBasicParsing"
 
-if exist "%RUTA_DESTINO%" (
-    echo  [OK] Archivo descargado correctamente.
-    echo  [*] Iniciando herramienta...
-    timeout /t 2 >nul
-    
-    :: Ejecutar el script descargado
-    powershell -NoProfile -ExecutionPolicy Bypass -File "%RUTA_DESTINO%"
+if exist "%TEMP_PS1%" (
+    echo [OK] Descarga completada.
+    echo [*] Ejecutando configuracion de tareas...
+    echo.
+    powershell -NoProfile -ExecutionPolicy Bypass -File "%TEMP_PS1%"
+    del "%TEMP_PS1%"
 ) else (
-    echo  [!] ERROR: No se pudo descargar el archivo. 
-    echo      Comprueba la conexion a internet o la URL de GitHub.
+    echo [!] ERROR: No se pudo conectar con GitHub.
     pause
 )
 
-:: Limpiar al salir (opcional)
-del "%RUTA_DESTINO%" >nul 2>&1
 exit
