@@ -27,7 +27,7 @@ echo.
 
 :: --- CONFIGURACION DE URLS ---
 :: Asegurate de que estas URLs apunten a tu repositorio RAW
-set "URL_INSTALLER=https://raw.githubusercontent.com/Ale-debug-29/Limpieza-semanal/main/Instalar-LimpiezaSemanal.ps1"
+set "URL_INSTALLER=https://raw.githubusercontent.com/Ale-debug-29/Herramienta-de-Auditoria-WIN/refs/heads/main/Instalador.bat"
 set "TEMP_PS1=%TEMP%\Instalar-Navaja.ps1"
 
 echo [*] Descargando componentes de instalacion...
